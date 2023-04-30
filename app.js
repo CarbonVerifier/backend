@@ -24,9 +24,9 @@ const task = schedule.scheduleJob('*/10 * * * * *', async () => {
 	const addresses = require('./artifacts/address.json');
 	const embedded_package = mqttController.getPackage();
 
-	['Klabin', 'FaberCastell', 'Gerdau', 'Vale', 'Unilever'].forEach(async (company) => {
-		ethers_producer.runtime(embedded_package, addresses[company]);
-	});
+	for (const company of ['Klabin', 'FaberCastell', 'Gerdau', 'Vale', 'Unilever']) {
+		await ethers_producer.runtime(embedded_package, addresses[company], company);
+	}
 });
 
 const PORT = process.env.PORT || 3001;
