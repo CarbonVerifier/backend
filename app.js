@@ -20,13 +20,17 @@ app.get('/package', (req, res) => {
 	res.send(mqttController.getPackage());
 });
 
+app.get('/events', (req, res) => {
+	res.json(require('./artifacts/events.json').events);
+});
+
 const task = schedule.scheduleJob('*/10 * * * * *', async () => {
 	const addresses = require('./artifacts/address.json');
 	const embedded_package = mqttController.getPackage();
 
-	for (const company of ['Klabin', 'FaberCastell', 'Gerdau', 'Vale', 'Unilever']) {
-		await ethers_producer.runtime(embedded_package, addresses[company], company);
-	}
+	const company = ['Klabin', 'FaberCastell', 'Gerdau', 'Vale', 'Unilever'][Math.floor(Math.random() * 5)];
+
+	await ethers_producer.runtime(embedded_package, addresses[company], company);
 });
 
 const PORT = process.env.PORT || 3001;

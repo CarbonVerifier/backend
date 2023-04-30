@@ -1,4 +1,5 @@
 const { ethers } = require('ethers');
+const fs = require('fs');
 
 const DEFAULT_ABI = require('../artifacts/abi.json').abi;
 
@@ -9,7 +10,6 @@ class EthersProducer {
 		this.connected_wallet = this.wallet.connect(this.provider);
 
 		this.wss_provider = new ethers.WebSocketProvider(`wss://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`);
-		this.events = [];
 	}
 
 	async runtime(embedded_package, contract_address, company) {
@@ -23,20 +23,25 @@ class EthersProducer {
 
 		let contract = new ethers.Contract(contract_address, DEFAULT_ABI, this.connected_wallet);
 
-		contract.on('status', (contractAddress, payload) => {
+		const callback = (contract_address, payload) => {
 			console.log('Status event received.');
-			this.events.push({
-				contractAddress,
+			const event = {
+				contract_address,
 				company,
 				payload,
-			});
+			};
 
-			console.log('event: ', {
-				contractAddress,
-				company,
-				payload,
-			});
-		});
+			// appent to file temp.json from artifacts folder
+			let content = require('../artifacts/events.json').events;
+
+			content.push(event);
+
+			fs.writeFileSync('./artifacts/events.json', JSON.stringify({ events: content }));
+
+			console.log('event: ', event);
+		};
+
+		contract.on('status', callback);
 
 		console.log('Sending data to blockchain...');
 		const transaction = await contract.CarbonVerifierCheck(parseInt(temperature), parseInt(light), parseInt(co2), parseInt(humidity));

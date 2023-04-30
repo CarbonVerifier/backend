@@ -1,3 +1,5 @@
 node_modules
 .env
 ```
+artifacts/temp.json
+artifacts/events.json
