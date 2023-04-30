@@ -3,6 +3,13 @@ require('dotenv').config();
 
 class MqttController {
 	constructor() {
+		this.package = {
+			temperature: 0,
+			light: 0,
+			co2: 0,
+			humidity: 0,
+		};
+
 		this.client = mqtt.connect(process.env.BROKER_SERVER, {
 			port: process.env.BROKER_PORT,
 			username: process.env.BROKER_USER,
@@ -20,33 +27,26 @@ class MqttController {
 
 		this.client.subscribe(['temperature', 'light', 'co2', 'humidity']);
 
-		this.package = {
-			temperature: 0,
-			light: 0,
-			co2: 0,
-			humidity: 0,
-		};
-
 		this.client.on('message', this.handleMessage.bind(this));
 	}
 
 	handleMessage(topic, message) {
 		switch (topic) {
 			case 'temperature':
-				console.log('updated temperature: ' + message.toString());
-				this.package.temperature = message.toString();
+				//console.log('updated temperature: ' + message.toString());
+				this.package.temperature = parseFloat(message);
 				break;
 			case 'light':
-				console.log('updated light: ' + message.toString());
-				this.package.light = message.toString();
+				//console.log('updated light: ' + message.toString());
+				this.package.light = parseFloat(message);
 				break;
 			case 'co2':
-				console.log('updated co2: ' + message.toString());
-				this.package.co2 = message.toString();
+				//console.log('updated co2: ' + message.toString());
+				this.package.co2 = parseFloat(message);
 				break;
 			case 'humidity':
-				console.log('updated humidity: ' + message.toString());
-				this.package.humidity = message.toString();
+				//console.log('updated humidity: ' + message.toString());
+				this.package.humidity = parseFloat(message);
 				break;
 			default:
 				console.log('topic not found');
