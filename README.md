@@ -1,6 +1,6 @@
 # Backend
 
-TO run your backend run the command
+To run your backend run the command
 ``node app.js``
 
 ### We have two routes:
