@@ -1,19 +1,31 @@
-const mqtt = require('mqtt');
-require('dotenv').config();
+import mqtt from 'mqtt';
+import dotenv from 'dotenv';
 
-class MqttController {
+dotenv.config();
+
+export interface Package {
+	temperature: number;
+	light: number;
+	co2: number;
+	humidity: number;
+}
+
+export default class MqttController {
+	private package: Package;
+	private client: mqtt.MqttClient;
+
 	constructor() {
 		this.package = {
-			temperature: 0,
-			light: 0,
-			co2: 0,
-			humidity: 0,
+			temperature: 0.0,
+			light: 0.0,
+			co2: 0.0,
+			humidity: 0.0,
 		};
 
-		this.client = mqtt.connect(process.env.BROKER_SERVER, {
-			port: process.env.BROKER_PORT,
-			username: process.env.BROKER_USER,
-			password: process.env.BROKER_PASSWORD,
+		this.client = mqtt.connect(String(process.env.BROKER_SERVER), {
+			port: Number(process.env.BROKER_PORT),
+			username: String(process.env.BROKER_USER),
+			password: String(process.env.BROKER_PASSWORD),
 			protocol: 'mqtts',
 		});
 
@@ -30,7 +42,7 @@ class MqttController {
 		this.client.on('message', this.handleMessage.bind(this));
 	}
 
-	handleMessage(topic, message) {
+	handleMessage(topic: string, message: string) {
 		switch (topic) {
 			case 'temperature':
 				//console.log('updated temperature: ' + message.toString());
@@ -54,9 +66,7 @@ class MqttController {
 		}
 	}
 
-	getPackage() {
+	getCurrentPackage() {
 		return this.package;
 	}
 }
-
-module.exports = { MqttController };
