@@ -15,8 +15,5 @@ class ToucanSDK {
 		this.provider = new ethers.JsonRpcProvider('https://alfajores-forno.celo-testnet.org');
 		this.wallet = new ethers.Wallet(String(process.env.PRIVATE_KEY), this.provider);
 		this.signer = this.wallet.connect(this.provider);
-
-		//this.toucan.setProvider(this.provider);
-		//this.toucan.setSigner(this.signer);
 	}
 }

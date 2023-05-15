@@ -1,9 +1,26 @@
-# Backend
+# Running
 
-To run your backend run the command
-``node app.js``
+Our project was developed with typescript and Node.js. In the project folder, install the dependencies with the command:
 
-### We have two routes:
-1- http://localhost:3001/swap_tokens, route that allows to buy tokens with 1inch protocol
+```bash
+npm install
+```
 
-2- http://localhost:3001/package, route responsible to send and retrieve  collected data from the blockchain
+The main dependencies used are:
+
+-   typescript
+-   express
+-   mqtt
+-   web3js
+
+To run the project:
+
+-   Dev
+    ```bash
+    npm run dev
+    ```
+-   Production
+    ```bash
+    npm run build
+    npm start
+    ```
