@@ -24,3 +24,7 @@ To run the project:
     npm run build
     npm start
     ```
+
+# Environment Variables
+
+Replace the values of [.env.template](.env.template) with your own values and rename the file to `.env` to be able to run the project correctly.
